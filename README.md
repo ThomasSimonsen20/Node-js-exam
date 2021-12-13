@@ -1,1 +1,1 @@
-# Node-js-exam
+NodeJS exam project
