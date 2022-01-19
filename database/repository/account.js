@@ -1,6 +1,6 @@
 import connection from "../../database/conectMysql.js"
 
-
+/*
 export async function getAccounts() {
     return await new Promise(async (resolve, reject) => {
         try {
@@ -10,7 +10,7 @@ export async function getAccounts() {
             error => reject(error)
         }
     })
-}
+} */
 
 
 export async function getAccount(accountID) {
@@ -38,11 +38,11 @@ export async function createAccount(account) {
     })
 } 
 
-export async function login(username) {
+export async function getAccountBasedOnName(username) {
     return await new Promise(async (resolve, reject) => {
         try {
-            const [rows] = await connection.execute(`
-            SELECT * FROM accounts WHERE accountsUsername = ?`, [username])
+            const [rows] = await connection.execute("SELECT * FROM accounts WHERE accountsUsername = ?", 
+            [username])
 
             resolve(rows)
         } catch {
@@ -54,7 +54,7 @@ export async function login(username) {
 export async function updateAccountRole(role, accountsId) {
     return await new Promise(async (resolve, reject) => {
         try {
-            await connection.execute('UPDATE accounts SET accountsRole = ? WHERE idaccounts = ?',
+            await connection.execute("UPDATE accounts SET accountsRole = ? WHERE idaccounts = ?",
             [role, accountsId])
             
             resolve(true)
@@ -64,10 +64,37 @@ export async function updateAccountRole(role, accountsId) {
     })
 } 
 
+export async function updateUsername(name, accountsId) {
+    return await new Promise(async (resolve, reject) => {
+        try {
+            await connection.execute("UPDATE accounts SET accountsUsername = ? WHERE idaccounts = ?",
+            [name, accountsId])
+            
+            resolve(true)
+        } catch {
+            error => reject(error)
+        }
+    })
+} 
+
+export async function updateAccountPassword(password, accountsId) {
+    return await new Promise(async (resolve, reject) => {
+        try {
+            await connection.execute("UPDATE accounts SET accountsPassword = ? WHERE idaccounts = ?",
+            [password, accountsId])
+            
+            resolve(true)
+        } catch {
+            error => reject(error)
+        }
+    })
+} 
+
+
 export async function updateIsVerified(isVerified, accountsId) {
     return await new Promise(async (resolve, reject) => {
         try {
-            await connection.execute('UPDATE accounts SET isVerified = ? WHERE idaccounts = ?',
+            await connection.execute("UPDATE accounts SET isVerified = ? WHERE idaccounts = ?",
             [isVerified, accountsId])
             
             resolve(true)

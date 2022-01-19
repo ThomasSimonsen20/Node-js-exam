@@ -13,6 +13,10 @@ function getMoviesFromAPI() {
 
         
         movies.map(movie => {
+            if(movie.Poster === "N/A") {
+                movie.Poster = "../images/noPicture.jpg"
+            }
+
             const movieDiv = document.createElement("div")
             movieDiv.classList.add("movie-container")
             movieDiv.innerHTML = `
@@ -33,7 +37,6 @@ function getMoviesFromAPI() {
 }
 
 function movieSelected(value) {
-    console.log(value)
     localStorage.setItem('movieID', value)
     location.href = "/movie-details"
 } 
@@ -42,7 +45,7 @@ function movieSelected(value) {
 document.getElementById("movie-button").addEventListener("click", getMoviesFromAPI)
 document.getElementById("title").addEventListener("keyup", (event) => {
     if (event.keyCode === 13) {
-      event.preventDefault();
-      document.getElementById("movie-button").click();
+      event.preventDefault()
+      document.getElementById("movie-button").click()
     }
   });

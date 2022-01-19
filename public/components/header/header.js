@@ -1,10 +1,13 @@
-fetch("/api/account")
+
+fetch("/api/account/roleAndVerified")
 .then(response => response.json())
 .then(( account ) => {
     
-    if(account.accountsRole === 2 && account.isVerified === 0) {
+    console.log(account.accountRole)
+    console.log(account.isVerified)
+    if(account.accountRole === 2 && account.isVerified === 0) {
         freeAndNotVerified()
-    } else if (account.accountsRole === 2 && account.isVerified === 1) {
+    } else if (account.accountRole === 2 && account.isVerified === 1) {
         freeAndVerified()
     } else {
         premium()

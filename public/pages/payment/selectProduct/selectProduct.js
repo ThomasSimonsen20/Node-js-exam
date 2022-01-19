@@ -1,11 +1,8 @@
-let isVerified
 
-fetch("/api/account")
+fetch("/api/account/roleAndVerified")
 .then(response => response.json())
-.then((account) => {
-    
-    //console.log(account.isVerified)
-    isVerified = account.isVerified
+.then(( account ) => {
+    let isVerified = account.isVerified
 
     if(isVerified === 0) {
         document.getElementById("verify-hidden-text").style.display = "block";
@@ -24,13 +21,10 @@ function checkout() {
         },
         body: JSON.stringify({
             items: [
-            { id: 1, quantity: 1 }
-        ],
+            { id: 1, quantity: 1 }],
         }),
         })
-        .then(res => {
-            if (res.ok) return res.json()
-        })
+        .then(res => res.json())
         .then(({ url }) => {
             window.location = url
         })
@@ -40,4 +34,17 @@ function checkout() {
   
 }
 
-//document.getElementById("upgradeButton").addEventListener("click", checkout);
+function sendLink() {
+    fetch("/api/account/resend-verification", {
+        method: "POST",
+        headers: { "Content-type": "application/json; charset=UTF-8" }
+    }).then(response => {
+        if (response.status === 200) {
+            toastr.info("New email has been sent")
+
+        } else {
+            console.log("Error sending the contact message", response.status)
+        } 
+    })
+}
+

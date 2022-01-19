@@ -13,7 +13,7 @@ body {
     background-color: #303245;
     border-radius: 20px;
     box-sizing: border-box;
-    height: 26rem;
+    height: 27rem;
     padding: 20px;
     width: 40rem;
 }
@@ -54,6 +54,13 @@ input {
     width: 100%;
 }
 
+.forgot-password {
+    display: flex;
+    justify-content: flex-end;
+    text-decoration: none;
+    color: white;
+}
+
 .btn {
     background-color: #08d;
     border-radius: 12px;
@@ -63,7 +70,7 @@ input {
     cursor: pointer;
     font-size: 18px;
     height: 3rem;
-    margin-top: 3rem;
+    margin-top: 4rem;
     text-align: center;
     width: 100%;
 

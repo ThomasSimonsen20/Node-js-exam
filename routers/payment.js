@@ -1,26 +1,23 @@
 import dotenv from "dotenv"
 dotenv.config()
 
-import connection from "../database/conectMysql.js"
+import * as productRepo from "../database/repository/product.js"
 
-import express, { application } from "express"
+import express from "express"
 const router = express()
 
 import Stripe from "stripe"
 const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY)
 
 import * as createPages from "../util/render.js"
-const successPage = createPages.createPage("payment/successPage/success.html")
-const cancelPage = createPages.createPage("payment/cancelPage/cancel.html")
-
-
+const successPage = createPages.createPageWithoutHeader("payment/successPage/success.html")
+const cancelPage = createPages.createPageWithoutHeader("payment/cancelPage/cancel.html")
 
 let products
 
-
- async function getProduct() {
-  const [rows, columns] = await connection.execute("SELECT * FROM product")
-  products = {id: rows[0].idproduct, priceInCents: rows[0].priceInCents, name: rows[0].name}
+async function getProduct() {
+  const [result] = await productRepo.getProduct()
+  products = {id: result.idproduct, priceInCents: result.priceInCents, name: result.name}
 } 
 
 router.post("/create-checkout-session", async (req,res) => {
@@ -52,7 +49,7 @@ router.post("/create-checkout-session", async (req,res) => {
 
 router.get("/successful-payment", async (req, res) => {
     try {
-        const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
+        await stripe.checkout.sessions.retrieve(req.query.session_id);
         res.send(successPage)
     } catch (error) {
         res.redirect("/")

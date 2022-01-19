@@ -14,9 +14,7 @@ fetch(domainURL + localStorage.getItem('movieID') + apiKey)
         let isWatched = ""
         let onclickFunction = "saveMovieToWatchedList()"
         let buttonText = "Save to watched list"
-
-        console.log(accountRole)
-        console.log(movieArrayLength)
+        let isWatchedClass = ""
 
         if(accountRole === 2 && movieArrayLength === 2) {
             onclickFunction = "goToSelectProduct()"
@@ -26,11 +24,15 @@ fetch(domainURL + localStorage.getItem('movieID') + apiKey)
 
         if (isWatchedMovie) {
             movieRating = isWatchedMovie
-            isWatched = "Movie is on watched list"
+            isWatched = "Watched"
             onclickFunction = "updateRating()"
             buttonText = "Update Rating"
+            isWatchedClass = "isWatched"
         }
 
+        if(movie.Poster === "N/A") {
+            movie.Poster = "../images/noPicture.jpg"
+        }
 
         const movieWrapper = document.getElementById("movies-wrapper")
         const movieDiv = document.createElement("div")
@@ -40,7 +42,7 @@ fetch(domainURL + localStorage.getItem('movieID') + apiKey)
             <div class="info-container">
                 <div class="movieTitle-container">
                     <h3 class="movieTitle" id="movietitle">${(movie.Title)}</h3>
-                    <p>${(isWatched)}</p>
+                    <p class="${(isWatchedClass)}" id="isWatched">${(isWatched)}</p>
                 </div>
                 <ul class="listGroup">
                     <li class="listGroupItem"><strong>Genre:</strong> ${movie.Genre}</li>
@@ -124,39 +126,41 @@ function updateRating() {
         if (response.status === 200) {
             location.href= "/watched-movies"
         } else {
-            console.log("Error sending the contact message", response.status);
+            console.log("Error sending the contact message", response.status)
         }
     });
 }
-
 
 function loadStars(){
-    let stars = document.querySelectorAll('.star');
-    stars.forEach(function(star){
-        star.addEventListener('click', setRating); 
-    });
+    let stars = document.querySelectorAll('.star')
+    let starsArray = [...stars]
+    starsArray.map((star) => {
+        star.addEventListener('click', setRating)
+    })
     
-    let rating = parseInt(document.querySelector('.stars').getAttribute('data-rating'));
-    let target = stars[rating - 1];
-    target.dispatchEvent(new MouseEvent('click'));
-};
+    let rating = parseInt(document.querySelector('.stars').getAttribute('data-rating'))
+    let target = stars[rating - 1]
+    target.dispatchEvent(new MouseEvent('click'))
+}
 
 function setRating(ev){
-    let span = ev.currentTarget;
-    let stars = document.querySelectorAll('.star');
-    let match = false;
-    let num = 0;
-    stars.forEach(function(star, index){
+    let span = ev.currentTarget
+    let stars = document.querySelectorAll('.star')
+    let match = false
+    let num = 0
+    let starsArray = [...stars]
+
+    starsArray.map((star, index) => {
         if(match){
-            star.classList.remove('rated');
+            star.classList.remove('rated')
         }else{
-            star.classList.add('rated');
+            star.classList.add('rated')
         }
-        //are we currently looking at the span that was clicked
+        
         if(star === span){
-            match = true;
-            num = index + 1;
+            match = true
+            num = index + 1
         }
-    });
-    document.querySelector('.stars').setAttribute('data-rating', num);
-}
+    })
+    document.querySelector('.stars').setAttribute('data-rating', num)
+} 
